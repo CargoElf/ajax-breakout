@@ -40,12 +40,12 @@
       <p>Adds song to currently selected playlist</p>
       <form action="" method="POST">
         <div class="form-group">
-          <label for="exampleInputEmail1">Title</label>
-          <input type="text" class="form-control" id="title">
+          <label for="song[title]" id="title">Title</label>
+          <input type="text" class="form-control" name="song[title]">
         </div>
         <div class="form-group">
-          <label for="exampleInputPassword1">Artist</label>
-          <input type="text" class="form-control" id="email">
+          <label for="song[artist]" id="artist">Artist</label>
+          <input type="text" class="form-control" name="song[artist]">
         </div>
         <button type="submit" class="btn btn-default">Submit</button>
       </form>

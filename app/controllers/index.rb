@@ -8,6 +8,16 @@ get '/playlists/:id' do
   Playlist.find_by(id: params[:id]).tracks.to_json
 end
 
-delete '/songs/:id' do
-  Track.find(params[:id]).destroy
+post '/playlists/:id/tracks' do
+  @track = Track.new(params[:song])
+
+  if @track.save
+    @playlist = Playlist.find_by(id: params[:id])
+    @playlist.tracks << @track
+    content_type :json
+    @track.to_json
+  else
+    status 422
+    body @track.errors.to_json
+  end
 end

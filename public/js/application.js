@@ -12,32 +12,49 @@ $(document).ready(function() {
       $("#songsContainer").show('slow');
       $("#addSongContainer").show('slow');
       $row.addClass("info"); // indicate this playlist was selected
-      $("#addSongContainer form").attr("action", url + "/songs"); //set the form to add songs to this playlist
+      $("#addSongContainer form").attr("action", url + "/tracks"); //set the form to add songs to this playlist
     })
   });
 
-  $("#songsContainer").on("click", "i.fa-trash", function(){
-    var $row = $(this).parent().parent();
-    var songId = $row.attr("data-song-id");
+  $("#addSongContainer form").on("submit", function(event){
+    event.preventDefault();
+    var $form = $(this);
 
     $.ajax({
-      url: "/songs/" + songId,
-      method: "DELETE"
+      url: $form.attr("action"),
+      method: $form.attr("method"),
+      data: $form.serialize()
     }).done(function(response){
-      $row.remove();
-    });
-  })
+      $("span.error").remove();
+      $form.trigger("reset");
+      $("#songsContainer tbody").append(buildSong(response));
+    }).fail(processErrors);
+  });
 });
 
 function buildSongs(data) {
   var allSongs = "";
 
   for(var i = 0; i < data.length; i++) {
-    allSongs += `<tr data-song-id="${data[i].id}">
-              <td>${data[i].title}</td>
-              <td>${data[i].artist}</td>
-              <td><i class="fa fa-trash" aria-hidden="true"></i></td>
-            </tr>`;
+    allSongs += buildSong(data[i]);
   }
+
   return allSongs;
+}
+
+function buildSong(songData) {
+  return `<tr data-song-id="${songData.id}">
+            <td>${songData.title}</td>
+            <td>${songData.artist}</td>
+            <td><i class="fa fa-trash" aria-hidden="true"></i></td>
+          </tr>`;
+}
+
+function processErrors(response) {
+  var errors = JSON.parse(response.responseText);
+  var fields_with_errors = Object.keys(errors);
+
+  for(var i = 0; i < fields_with_errors.length; i++) {
+    $("#" + fields_with_errors[i]).append(`<span class="error">${errors[fields_with_errors[i]]}</span>`);
+  }
 }

@@ -21,3 +21,8 @@ body {
 #playlistsContainer tbody tr, #songsContainer tbody i {
   cursor: pointer;
 }
+
+span.error {
+  color: #e51c23;
+  margin-left: 5px;
+}
