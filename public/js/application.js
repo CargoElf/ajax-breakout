@@ -1,4 +1,48 @@
 $(document).ready(function() {
+  // what element is my event being bound to?
+  // are these elements always on the page when it loads?
+    //always - no need for event delegation
+    //sometimes/never - event delegation
+  // what event are we binding to that element?
+  // do we have an default behavior to prevent?
+
+  // make sure your event is bound, by console.log(ing) something
+
+  // ajax call
+    // where is the url coming from?
+    // where is the method coming?
+    // do we need to send any data?
+
+    //controller
+      // route
+      // do I have to consider this working for non-ajax
+      // what data are we receiving?
+      // p params
+      // what am I doing with that data?
+      // what am I sending back to the front end (html - partial, json)
+
+    // console.log the response in done to make sure you are getting back the right thing
+
+    // ajax call continued
+    // decide what to do with that data that comes back (if any)
+    // decide if you need to update the DOM
+
+  $("#songsContainer").on("click", "i.fa-trash", function(event){
+    event.preventDefault();
+
+    var $row = $(this).parent().parent();
+    var url = "/tracks/" + $row.attr("data-song-id");
+
+    $.ajax({
+      url: url,
+      method: "DELETE",
+    }).done(function(response){
+      $row.remove();
+    });
+
+  });
+
+
   $("#playlistsContainer tr").on("click", function(event){
     var $row = $(this);
     var playlistId = $row.attr("data-playlist-id");
@@ -51,6 +95,7 @@ function buildSong(songData) {
 }
 
 function processErrors(response) {
+  console.log(response);
   var errors = JSON.parse(response.responseText);
   var fields_with_errors = Object.keys(errors);
 

@@ -21,3 +21,7 @@ post '/playlists/:id/tracks' do
     body @track.errors.to_json
   end
 end
+
+delete '/tracks/:id' do
+  Track.find_by(id: params[:id]).destroy
+end
